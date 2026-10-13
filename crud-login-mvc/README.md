@@ -160,7 +160,7 @@ El sistema permite:
 ### Clonar el repositorio
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+git clone https://github.com/Mateocorone/Crud-Login.git
 ```
 
 Acceder a la carpeta:
