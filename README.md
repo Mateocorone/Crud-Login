@@ -1,33 +1,36 @@
 # Sistema de Gestión de Productos | CRUD + Login con MVC
 
+**Sitio desplegado:** https://crud-login-2ood.onrender.com/
+
 ## 1. Descripción del proyecto
 
-Aplicación web desarrollada utilizando **Node.js, Sails.js y el patrón de arquitectura MVC (Modelo-Vista-Controlador)**.
+Aplicación web desarrollada con **Node.js, Sails.js y el patrón de arquitectura MVC (Modelo-Vista-Controlador)**.
 
 El sistema permite gestionar un inventario de productos mediante las operaciones CRUD: crear, consultar, actualizar y eliminar registros.
 
-Además, incorpora un sistema de autenticación mediante usuario y contraseña, almacenamiento seguro de contraseñas con bcrypt, manejo de sesiones y protección de rutas privadas.
+Incorpora autenticación con usuario y contraseña, almacenamiento seguro de contraseñas con bcrypt, manejo de sesiones y protección de rutas privadas. La interfaz usa HTML5 semántico, EJS y Bootstrap 5.
 
-La interfaz está desarrollada utilizando HTML5 semántico, EJS y Bootstrap 5.
+La aplicación está desplegada en **Render** y guarda sus datos en una base **PostgreSQL alojada en Neon**.
 
-Este proyecto fue realizado como parte de la **Tarea 3: Desarrollo de una aplicación CRUD y Login con MVC**.
+Proyecto realizado como parte de la **Tarea 3: Desarrollo de una aplicación CRUD y Login con MVC**.
 
 ## 2. Objetivos
 
 ### Objetivo general
 
-Desarrollar una aplicación web utilizando el patrón MVC que permita gestionar productos y autenticar usuarios, garantizando que las funcionalidades privadas sean accesibles únicamente mediante una sesión válida.
+Desarrollar una aplicación web con el patrón MVC que permita gestionar productos y autenticar usuarios, garantizando que las funcionalidades privadas solo sean accesibles mediante una sesión válida.
 
 ### Objetivos específicos
 
 - Implementar las cuatro operaciones CRUD sobre productos.
-- Aplicar el patrón MVC utilizando Sails.js.
+- Aplicar el patrón MVC con Sails.js.
 - Desarrollar un sistema de registro e inicio de sesión.
 - Proteger las contraseñas mediante hashing con bcrypt.
 - Implementar sesiones para gestionar la autenticación.
 - Restringir el acceso a rutas privadas mediante Policies.
-- Incorporar protección CSRF en solicitudes que modifican información.
-- Construir interfaces utilizando HTML5 semántico, EJS y Bootstrap.
+- Incorporar protección CSRF en las solicitudes que modifican información.
+- Construir interfaces con HTML5 semántico, EJS y Bootstrap.
+- Desplegar la aplicación en un servicio en la nube con una base de datos persistente.
 - Verificar el funcionamiento mediante pruebas funcionales.
 
 ## 3. Tecnologías utilizadas
@@ -41,22 +44,23 @@ Desarrollar una aplicación web utilizando el patrón MVC que permita gestionar 
 | HTML5 | Estructura semántica de las páginas |
 | Bootstrap 5 | Diseño responsive de la interfaz |
 | Waterline ORM | Acceso y manipulación de datos |
-| sails-disk | Persistencia local durante el desarrollo |
+| sails-disk | Persistencia local en desarrollo |
+| PostgreSQL + sails-postgresql | Base de datos en producción |
+| Neon | Servicio que aloja la base PostgreSQL |
+| Render | Plataforma donde se despliega la aplicación |
 | bcrypt | Hash seguro de contraseñas |
 | Git y GitHub | Control de versiones y repositorio |
 | Postman | Pruebas de endpoints HTTP |
 
 ## 4. Arquitectura MVC
 
-El proyecto utiliza el patrón Modelo-Vista-Controlador, que separa la aplicación en tres componentes.
+El proyecto separa la aplicación en tres componentes.
 
 ### Modelo (Model)
 
-Define la estructura de los datos y permite realizar operaciones mediante Waterline ORM.
+Define la estructura de los datos y permite operar sobre ellos mediante Waterline ORM.
 
 **Producto.js**
-
-Contiene los atributos:
 
 - `nombre`: nombre del producto.
 - `precio`: precio del producto.
@@ -65,16 +69,12 @@ Contiene los atributos:
 
 **Usuario.js**
 
-Contiene los atributos:
-
 - `username`: nombre de usuario único.
 - `password`: hash de la contraseña del usuario.
 
 ### Vista (View)
 
-Permite visualizar e interactuar con la información.
-
-Las vistas se desarrollaron con EJS, HTML5 semántico y Bootstrap.
+Permite visualizar e interactuar con la información. Se desarrollaron con EJS, HTML5 semántico y Bootstrap.
 
 - `login.ejs`: formulario de inicio de sesión.
 - `panel.ejs`: interfaz para administrar productos.
@@ -84,14 +84,14 @@ Las vistas se desarrollaron con EJS, HTML5 semántico y Bootstrap.
 Procesa las peticiones HTTP, ejecuta la lógica y comunica los modelos con las vistas.
 
 - `ProductoController.js`: operaciones CRUD.
-- `AuthController.js`: registro, Login y Logout.
+- `AuthController.js`: registro, login y logout.
 - `PanelController.js`: consulta y presentación de productos.
 
 ### Flujo MVC
 
 1. El usuario realiza una acción desde el navegador.
 2. La aplicación recibe la petición mediante una ruta.
-3. Las Policies verifican los permisos de acceso cuando corresponda.
+3. Las Policies verifican los permisos de acceso cuando corresponde.
 4. El controlador procesa la petición.
 5. El modelo realiza las operaciones sobre los datos.
 6. El controlador devuelve una respuesta JSON o renderiza una vista EJS.
@@ -99,7 +99,7 @@ Procesa las peticiones HTTP, ejecuta la lógica y comunica los modelos con las v
 ## 5. Estructura del proyecto
 
 ```text
-crud-login-mvc/
+Crud-Login/
 ├── api/
 │   ├── controllers/
 │   │   ├── AuthController.js
@@ -111,7 +111,10 @@ crud-login-mvc/
 │   └── policies/
 │       └── estaAutenticado.js
 ├── config/
+│   ├── env/
+│   │   └── production.js
 │   ├── blueprints.js
+│   ├── datastores.js
 │   ├── models.js
 │   ├── policies.js
 │   ├── routes.js
@@ -123,36 +126,31 @@ crud-login-mvc/
 └── README.md
 ```
 
-Esta estructura presenta los archivos principales desarrollados para la tarea. Sails.js incluye otros archivos y directorios generados automáticamente.
+Se muestran los archivos principales desarrollados para la tarea. Sails.js incluye otros archivos y directorios generados automáticamente.
 
 ## 6. Funcionalidades
 
 ### CRUD de productos
 
-El sistema permite:
-
-**CREATE:** Registrar nuevos productos con nombre, precio, cantidad y descripción.
-
-**READ:** Consultar todos los productos registrados.
-
-**UPDATE:** Modificar los datos de un producto existente mediante su identificador.
-
-**DELETE:** Eliminar un producto, solicitando confirmación desde la interfaz.
+- **CREATE:** registrar productos con nombre, precio, cantidad y descripción.
+- **READ:** consultar todos los productos registrados.
+- **UPDATE:** modificar un producto existente mediante su identificador.
+- **DELETE:** eliminar un producto, con confirmación desde la interfaz.
 
 ### Autenticación
 
 - Registro de usuarios.
 - Inicio de sesión con usuario y contraseña.
-- Verificación de contraseña utilizando bcrypt.
+- Verificación de contraseña con bcrypt.
 - Gestión de sesiones.
 - Cierre de sesión.
 - Restricción de acceso a recursos privados.
 
-## 7. Instalación y ejecución
+## 7. Instalación y ejecución local
 
 ### Requisitos previos
 
-- Node.js y npm instalados.
+- Node.js 24 y npm instalados.
 - Git instalado.
 - Un navegador web.
 - Visual Studio Code u otro editor compatible.
@@ -161,12 +159,7 @@ El sistema permite:
 
 ```bash
 git clone https://github.com/Mateocorone/Crud-Login.git
-```
-
-Acceder a la carpeta:
-
-```bash
-cd crud-login-mvc
+cd Crud-Login
 ```
 
 ### Instalar dependencias
@@ -181,23 +174,50 @@ npm install
 npx sails lift
 ```
 
-La aplicación se ejecutará normalmente en:
+En desarrollo la aplicación usa `sails-disk`, por lo que no necesita configurar una base de datos. Se ejecuta en:
 
-`http://localhost:1337`
+- Login: `http://localhost:1337/login`
+- Panel (requiere sesión): `http://localhost:1337/panel`
 
-### Acceder al Login
+La aplicación no incluye usuarios predefinidos: crea el primero mediante `POST /auth/registro`. La contraseña debe tener al menos 8 caracteres.
 
-`http://localhost:1337/login`
+## 8. Despliegue en producción
 
-### Acceder al panel
+La aplicación se despliega en **Render** (servicio web con Node) y usa **PostgreSQL en Neon**.
 
-`http://localhost:1337/panel`
+### Configuración en Render
 
-El panel requiere una sesión autenticada.
+| Campo | Valor |
+|---|---|
+| Branch | `main` |
+| Build Command | `npm install` |
+| Start Command | `npm start` |
+| Instance Type | Free |
 
-**Nota:** La aplicación utiliza persistencia local para desarrollo. La configuración de migraciones y los secretos de sesión deben adaptarse antes de utilizar el proyecto en producción.
+### Variables de entorno
 
-## 8. Endpoints de la aplicación
+Los valores se configuran en el panel de Render y **no se guardan en el repositorio**.
+
+| Variable | Descripción |
+|---|---|
+| `DATABASE_URL` | Cadena de conexión de Neon (con `sslmode=require`) |
+| `sails_port` | Puerto en el que escucha la aplicación (`10000` en Render) |
+| `sails_session__secret` | Secreto aleatorio para firmar las cookies de sesión |
+| `NODE_VERSION` | Versión de Node (`24`) |
+
+### Creación de las tablas
+
+Sails no permite `migrate: 'alter'` en producción, por lo que la configuración usa `migrate: 'safe'`. Las tablas `usuario` y `producto` se crearon una sola vez ejecutando la aplicación en un entorno de desarrollo local conectado a la base de Neon, con la estrategia `alter`.
+
+### Configuración de sockets
+
+En producción Sails exige declarar los orígenes permitidos para sockets. Se configuró `sockets.onlyAllowOrigins` con la URL pública de la aplicación en `config/env/production.js`.
+
+### Aviso sobre el plan gratuito
+
+En el plan gratuito de Render el servicio se suspende tras un período de inactividad. La primera petición después de ese tiempo puede tardar unos segundos en responder.
+
+## 9. Endpoints de la aplicación
 
 ### Autenticación
 
@@ -216,12 +236,13 @@ El panel requiere una sesión autenticada.
 | PUT | `/productos/:id` | Actualizar producto |
 | DELETE | `/productos/:id` | Eliminar producto |
 
-### Vistas
+### Vistas y seguridad
 
 | Método | Endpoint | Descripción |
 |---|---|---|
-| GET | `/login` | Mostrar formulario de Login |
+| GET | `/login` | Mostrar formulario de login |
 | GET | `/panel` | Mostrar panel protegido |
+| GET | `/csrfToken` | Obtener el token CSRF |
 
 ### Ejemplo de creación de producto
 
@@ -236,7 +257,7 @@ El panel requiere una sesión autenticada.
 }
 ```
 
-Respuesta esperada: `201 Created`, incluyendo los datos y el identificador generado.
+Respuesta esperada: `201 Created`, con los datos y el identificador generado.
 
 ### Ejemplo de actualización
 
@@ -253,13 +274,11 @@ Respuesta esperada: `201 Created`, incluyendo los datos y el identificador gener
 
 El identificador debe corresponder a un producto existente.
 
-## 9. Seguridad implementada
+## 10. Seguridad implementada
 
 ### Protección de contraseñas
 
-Se utiliza bcrypt para generar hashes de contraseñas antes de almacenarlas.
-
-Ejemplo conceptual:
+Se usa bcrypt para generar el hash antes de almacenar la contraseña:
 
 ```javascript
 const passwordHash = await bcrypt.hash(password, 12);
@@ -268,47 +287,38 @@ const passwordHash = await bcrypt.hash(password, 12);
 Para verificar las credenciales:
 
 ```javascript
-const passwordValida = await bcrypt.compare(
-  password,
-  usuario.password
-);
+const passwordValida = await bcrypt.compare(password, usuario.password);
 ```
 
-Se utiliza bcrypt en lugar de MD5 porque está diseñado para almacenar contraseñas mediante hashes con un factor de coste configurable.
+Se usa bcrypt en lugar de MD5 porque está diseñado para almacenar contraseñas y permite configurar un factor de coste.
 
 ### Sesiones
 
-Después del inicio de sesión, el servidor guarda el identificador del usuario en la sesión.
+Tras el inicio de sesión, el servidor guarda el identificador del usuario en la sesión:
 
 ```javascript
 req.session.usuarioId = usuario.id;
 ```
 
-Al cerrar sesión, se invalida mediante:
-
-```javascript
-req.session.destroy();
-```
+Al cerrar sesión se invalida con `req.session.destroy()`.
 
 ### Protección de rutas mediante Policies
 
-La Policy `estaAutenticado` verifica que la petición tenga una sesión válida antes de permitir el acceso al CRUD y al panel.
-
-Si el usuario no está autenticado, el servidor debe responder con `401 Unauthorized`.
+La Policy `estaAutenticado` verifica que la petición tenga una sesión válida antes de permitir el acceso al CRUD y al panel. Si el usuario no está autenticado, el servidor responde con `401 Unauthorized`.
 
 ### Protección CSRF
 
-Se configuró la protección CSRF para las peticiones que modifican información.
+Se configuró la protección CSRF para las peticiones que modifican información. Las solicitudes POST, PUT y DELETE realizadas desde el navegador incluyen el token mediante el encabezado `X-CSRF-Token`.
 
-Las solicitudes POST, PUT y DELETE realizadas desde el navegador incluyen el token correspondiente mediante el encabezado `X-CSRF-Token`.
+### Gestión de secretos
+
+Las credenciales de la base de datos y el secreto de sesión se leen desde variables de entorno y no forman parte del repositorio. El archivo `.gitignore` excluye `.env` y `config/local.js`.
 
 ### Rutas automáticas
 
-Se desactivaron las rutas blueprint automáticas que no son necesarias para el proyecto, utilizando rutas personalizadas para controlar el acceso.
+Se desactivaron las rutas blueprint automáticas que no son necesarias, y se usan rutas personalizadas para controlar el acceso.
 
-## 10. Pruebas funcionales
-
-Se realizaron pruebas del funcionamiento de la aplicación.
+## 11. Pruebas funcionales
 
 | Nº | Prueba | Resultado esperado |
 |---|---|---|
@@ -324,77 +334,39 @@ Se realizaron pruebas del funcionamiento de la aplicación.
 
 ### Verificación de rutas privadas
 
-Se utilizó una ventana de incógnito para comprobar el acceso sin una sesión autenticada.
-
-Al intentar acceder directamente a:
+Se usó una ventana de incógnito para comprobar el acceso sin sesión. Al intentar entrar directamente a:
 
 ```text
-http://localhost:1337/panel
-http://localhost:1337/productos
+https://crud-login-2ood.onrender.com/panel
+https://crud-login-2ood.onrender.com/productos
 ```
 
-El servidor devuelve un mensaje de acceso no autorizado, impidiendo consultar recursos privados.
+el servidor devuelve un mensaje de acceso no autorizado.
 
-## 11. Evidencias del funcionamiento
+## 12. Conclusiones
 
-Incluir capturas de pantalla de:
+El desarrollo del proyecto permitió aplicar el patrón MVC con Sails.js, separando la lógica de negocio, la estructura de datos y la presentación.
 
-- Pantalla de Login.
-- Panel de administración.
-- Registro de productos.
-- Edición y eliminación.
-- Acceso rechazado sin autenticación.
+Se implementaron las operaciones CRUD con Waterline ORM y un sistema de autenticación basado en sesiones, junto con mecanismos de protección de contraseñas y restricción de rutas privadas.
 
-Las capturas pueden almacenarse en una carpeta `docs/screenshots/` del repositorio y vincularse desde esta sección.
+El despliegue en Render con PostgreSQL en Neon permitió pasar de una persistencia local a una base de datos accesible en línea, y obligó a adaptar la configuración de producción: variables de entorno, sockets, SSL y migraciones.
 
-## 12. Video demostrativo
-
-**Plataforma:** Loom o YouTube.
-
-**Duración máxima:** 3 minutos.
-
-El video debe demostrar:
-
-1. La pantalla de Login.
-2. El inicio de sesión con credenciales correctas.
-3. Las operaciones CRUD sobre productos.
-4. El cierre de sesión.
-5. El bloqueo de acceso a rutas privadas.
-6. El uso de bcrypt para proteger las contraseñas.
-
-**Enlace del video:** pendiente de agregar.
-
-## 13. Conclusiones
-
-El desarrollo del proyecto permitió aplicar el patrón MVC mediante Sails.js, separando la lógica de negocio, la estructura de datos y la presentación.
-
-Se implementaron las operaciones CRUD utilizando Waterline ORM y un sistema de autenticación basado en sesiones.
-
-También se incorporaron mecanismos de protección de contraseñas y restricción de acceso a rutas privadas.
-
-La utilización de HTML5 semántico y Bootstrap permitió construir una interfaz organizada y adaptable.
-
-El proyecto demuestra cómo integrar operaciones de gestión de información y autenticación dentro de una misma aplicación MVC.
-
-## 14. Referencias
+## 15. Referencias
 
 - [Sails.js - Documentación oficial](https://sailsjs.com/documentation)
+- [Sails.js - Despliegue](https://sailsjs.com/documentation/concepts/deployment)
+- [Sails.js - Seguridad](https://sailsjs.com/documentation/concepts/security)
 - [Node.js - Documentación oficial](https://nodejs.org/en/docs)
 - [EJS - Documentación](https://ejs.co/)
 - [Bootstrap - Documentación oficial](https://getbootstrap.com/docs/5.3/)
 - [bcrypt - npm](https://www.npmjs.com/package/bcrypt)
+- [Render - Documentación](https://render.com/docs)
+- [Neon - Documentación](https://neon.tech/docs)
 - [MDN - HTML semántico](https://developer.mozilla.org/es/docs/Glossary/Semantics)
-- [Sails.js - Seguridad](https://sailsjs.com/documentation/concepts/security)
 
 ---
-## 15. Enlace del sitio deployado
-
-(https://crud-login-2ood.onrender.com/)
 
 **Proyecto académico:** Tarea 3 - CRUD y Login con MVC
-
 **Framework:** Sails.js
-
 **Arquitectura:** Modelo-Vista-Controlador
-
 **Asignatura:** Ingeniería Web
