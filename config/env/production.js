@@ -19,9 +19,10 @@
  * https://sailsjs.com/docs/concepts/deployment
  */
 
-const adapter = require("sails-postgresql");
-
 module.exports = {
+
+  // Render asigna el puerto por la variable PORT
+  port: process.env.PORT || 1337,
 
 
   /**************************************************************************
@@ -43,7 +44,7 @@ module.exports = {
 
 
   models: {
-    migrate: process.env.DATABASE_URL || 'safe',
+    migrate: process.env.MIGRATE || 'safe',
     // cascadeOnDestroy: false,
 
   },
