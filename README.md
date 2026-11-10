@@ -387,6 +387,9 @@ El proyecto demuestra cómo integrar operaciones de gestión de información y a
 - [Sails.js - Seguridad](https://sailsjs.com/documentation/concepts/security)
 
 ---
+## 15. Enlace del sitio deployado
+
+(https://crud-login-2ood.onrender.com/)
 
 **Proyecto académico:** Tarea 3 - CRUD y Login con MVC
 
