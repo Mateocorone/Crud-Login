@@ -43,7 +43,7 @@ module.exports = {
 
 
   models: {
-    migrate: process.env.DATABASE_URL || 'safe',
+    migrate: process.env.MIGRATE || 'safe',
     // cascadeOnDestroy: false,
 
   },
