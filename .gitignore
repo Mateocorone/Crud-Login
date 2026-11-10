@@ -7,8 +7,6 @@
 config/local.js
 node_modules
 .tmp
-.env
-.env.*
 
 .env
 .env.*
